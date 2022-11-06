@@ -5,8 +5,7 @@ import datetime
 import time
 import numpy as np
 import logging
-import requests
-
+import httpx
 def logg(msg):
     # basic logging 
     logging.basicConfig(level=logging.INFO, filename="output.log", format='%(asctime)s %(message)s') # include timestamp
@@ -74,6 +73,9 @@ LAST_OPEN = 0
 pairs = bc.getPairs(ASSET_BASE=True)
 client = bc.get_client()
 
+futures = bc.getFutures(ASSET_BASE=True)
+print(futures)
+print(len(futures))
 
 msg_ctr = 0
 
@@ -133,7 +135,7 @@ while trading:
     cc_copy = []
     print(datetime.datetime.now())
     t1 = time.time()
-    for coin in coins:
+    for coin in futures:
         t2 = time.time()
         try:
             df = bc.getHistoricalData(coin, intervals[TIMEFRAME], intervals_min[TIMEFRAME], datapoints=DATASIZE)
@@ -154,44 +156,48 @@ while trading:
                 vdiff_ = 0
             else:
                 vdiff_ = Volume[-1]/mean_vol
+            if diff_ > 1.002 and vdiff_ > 1.005 :
+                message = "Signal for {}. Current price is {}$. Price increase of {}% and volume increase of {}% so far.".format(coin, close_, 100*(diff_-1), 100*(vdiff_-1))
+                print(message)
+                httpx.get(URL.format(CH3_2_50, message))
             '''
             if diff_ > 1.02 and vdiff_ > 1.5 :
                 message = "Signal for {}. Current price is {}$. Price increase of {}% and volume increase of {}% so far.".format(coin, close_, 100*(diff_-1), 100*(vdiff_-1))
                 print(message)
-                requests.get(URL.format(CH3_2_50, message))
+                httpx.get(URL.format(CH3_2_50, message))
             if diff_ > 1.02 and vdiff_ > 2:
                 message = "Signal for {}. Current price is {}$. Price increase of {}% and volume increase of {}% so far.".format(coin, close_, 100*(diff_-1), 100*(vdiff_-1))
                 print(message)
-                requests.get(URL.format(CH3_2_100, message))
+                httpx.get(URL.format(CH3_2_100, message))
             if diff_ > 1.02 and vdiff_ > 3:
                 message = "Signal for {}. Current price is {}$. Price increase of {}% and volume increase of {}% so far.".format(coin, close_, 100*(diff_-1), 100*(vdiff_-1))
                 print(message)
-                requests.get(URL.format(CH3_2_200, message))
+                httpx.get(URL.format(CH3_2_200, message))
             '''
             if diff_ > 1.05 and vdiff_ > 1.5:
                 message = "Signal for {}. Current price is {}$. Price increase of {}% and volume increase of {}% so far.".format(coin, close_, 100*(diff_-1), 100*(vdiff_-1))
                 print(message)
-                requests.get(URL.format(CH60_5_50, message))
+                httpx.get(URL.format(CH60_5_50, message))
             if diff_ > 1.05 and vdiff_ > 2:
                 message = "Signal for {}. Current price is {}$. Price increase of {}% and volume increase of {}% so far.".format(coin, close_, 100*(diff_-1), 100*(vdiff_-1))
                 print(message)
-                requests.get(URL.format(CH60_5_100, message))
+                httpx.get(URL.format(CH60_5_100, message))
             if diff_ > 1.05 and vdiff_ > 3:
                 message = "Signal for {}. Current price is {}$. Price increase of {}% and volume increase of {}% so far.".format(coin, close_, 100*(diff_-1), 100*(vdiff_-1))
                 print(message)
-                requests.get(URL.format(CH60_5_200, message))
+                httpx.get(URL.format(CH60_5_200, message))
             if diff_ > 1.1 and vdiff_ > 1.5:
                 message = "Signal for {}. Current price is {}$. Price increase of {}% and volume increase of {}% so far.".format(coin, close_, 100*(diff_-1), 100*(vdiff_-1))
                 print(message)
-                requests.get(URL.format(CH60_10_50, message))
+                httpx.get(URL.format(CH60_10_50, message))
             if diff_ > 1.1 and vdiff_ > 2:
                 message = "Signal for {}. Current price is {}$. Price increase of {}% and volume increase of {}% so far.".format(coin, close_, 100*(diff_-1), 100*(vdiff_-1))
                 print(message)
-                requests.get(URL.format(CH60_10_100, message))
+                httpx.get(URL.format(CH60_10_100, message))
             if diff_ > 1.1 and vdiff_ > 3:
                 message = "Signal for {}. Current price is {}$. Price increase of {}% and volume increase of {}% so far.".format(coin, close_, 100*(diff_-1), 100*(vdiff_-1))
                 print(message)
-                requests.get(URL.format(CH60_10_200, message))
+                httpx.get(URL.format(CH60_10_200, message))
 
         except Exception as e:
             print("error")

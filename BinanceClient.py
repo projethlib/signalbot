@@ -74,6 +74,21 @@ class BinanceClient:
                         symbols.append(symbol)
         return symbols
 
+    def getFutures(self, ASSET_BASE=False):
+        EI = self.client.futures_exchange_info()
+        symbols = []
+        for ei in EI['symbols']:
+            symbol = str(ei['symbol'])
+            if symbol.endswith('USDT'):
+                if symbol.startswith('1000'):
+                    symbol = symbol[4:]
+                if ei['status'] == 'TRADING':
+                    if ASSET_BASE:
+                        symbols.append(symbol[:-4])
+                    else:
+                        symbols.append(symbol)
+        return symbols
+
     '''
     return historical data for a coin
     '''
