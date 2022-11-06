@@ -156,11 +156,11 @@ while trading:
                 vdiff_ = 0
             else:
                 vdiff_ = Volume[-1]/mean_vol
+            '''    
             if diff_ > 1.002 and vdiff_ > 1.005 :
                 message = "Signal for {}. Current price is {}$. Price increase of {}% and volume increase of {}% so far.".format(coin, close_, 100*(diff_-1), 100*(vdiff_-1))
                 print(message)
                 httpx.get(URL.format(CH3_2_50, message))
-            '''
             if diff_ > 1.02 and vdiff_ > 1.5 :
                 message = "Signal for {}. Current price is {}$. Price increase of {}% and volume increase of {}% so far.".format(coin, close_, 100*(diff_-1), 100*(vdiff_-1))
                 print(message)
